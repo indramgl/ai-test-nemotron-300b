@@ -29,47 +29,62 @@ $uri = rtrim($uri, '/');
 // Define routes
 $routes = [
     // Auth routes
-    ['GET', '/api/auth/login', 'App\\Http\\Controllers\\AuthController', 'showLoginForm'],
-    ['POST', '/api/auth/login', 'App\\Http\\Controllers\\AuthController', 'login'],
-    ['POST', '/api/auth/logout', 'App\\Http\\Controllers\\AuthController', 'logout'],
-    ['GET', '/api/auth/register', 'App\\Http\\Controllers\\AuthController', 'showRegisterForm'],
-    ['POST', '/api/auth/register', 'App\\Http\\Controllers\\AuthController', 'register'],
+    ['GET', '/api/auth/login', 'App\Http\Controllers\AuthController', 'showLoginForm'],
+    ['POST', '/api/auth/login', 'App\Http\Controllers\AuthController', 'login'],
+    ['POST', '/api/auth/logout', 'App\Http\Controllers\AuthController', 'logout'],
+    ['GET', '/api/auth/register', 'App\Http\Controllers\AuthController', 'showRegisterForm'],
+    ['POST', '/api/auth/register', 'App\Http\Controllers\AuthController', 'register'],
 
     // Account routes
-    ['GET', '/api/accounts', 'App\\Http\\Controllers\\AccountController', 'index'],
-    ['POST', '/api/accounts', 'App\\Http\\Controllers\\AccountController', 'store'],
-    ['GET', '/api/accounts/{id}', 'App\\Http\\Controllers\\AccountController', 'show'],
-    ['PUT', '/api/accounts/{id}', 'App\\Http\\Controllers\\AccountController', 'update'],
-    ['DELETE', '/api/accounts/{id}', 'App\\Http\\Controllers\\AccountController', 'destroy'],
+    ['GET', '/api/accounts', 'App\Http\Controllers\AccountController', 'index'],
+    ['POST', '/api/accounts', 'App\Http\Controllers\AccountController', 'store'],
+    ['GET', '/api/accounts/{id}', 'App\Http\Controllers\AccountController', 'show'],
+    ['PUT', '/api/accounts/{id}', 'App\Http\Controllers\AccountController', 'update'],
+    ['DELETE', '/api/accounts/{id}', 'App\Http\Controllers\AccountController', 'destroy'],
 
     // Transaction routes
-    ['GET', '/api/transactions', 'App\\Http\\Controllers\\TransactionController', 'index'],
-    ['POST', '/api/transactions', 'App\\Http\\Controllers\\TransactionController', 'store'],
-    ['GET', '/api/transactions/{id}', 'App\\Http\\Controllers\\TransactionController', 'show'],
-    ['PUT', '/api/transactions/{id}', 'App\\Http\\Controllers\\TransactionController', 'update'],
-    ['DELETE', '/api/transactions/{id}', 'App\\Http\\Controllers\\TransactionController', 'destroy'],
+    ['GET', '/api/transactions', 'App\Http\Controllers\TransactionController', 'index'],
+    ['POST', '/api/transactions', 'App\Http\Controllers\TransactionController', 'store'],
+    ['GET', '/api/transactions/{id}', 'App\Http\Controllers\TransactionController', 'show'],
+    ['PUT', '/api/transactions/{id}', 'App\Http\Controllers\TransactionController', 'update'],
+    ['DELETE', '/api/transactions/{id}', 'App\Http\Controllers\TransactionController', 'destroy'],
+    ['GET', '/api/transactions/summary', 'App\Http\Controllers\TransactionController', 'summary'],
+    ['GET', '/api/transactions/monthly', 'App\Http\Controllers\TransactionController', 'monthlySummary'],
 
     // Budget routes
-    ['GET', '/api/budgets', 'App\\Http\\Controllers\\BudgetController', 'index'],
-    ['POST', '/api/budgets', 'App\\Http\\Controllers\\BudgetController', 'store'],
-    ['GET', '/api/budgets/{id}', 'App\\Http\\Controllers\\BudgetController', 'show'],
-    ['PUT', '/api/budgets/{id}', 'App\\Http\\Controllers\\BudgetController', 'update'],
-    ['DELETE', '/api/budgets/{id}', 'App\\Http\\Controllers\\BudgetController', 'destroy'],
+    ['GET', '/api/budgets', 'App\Http\Controllers\BudgetController', 'index'],
+    ['POST', '/api/budgets', 'App\Http\Controllers\BudgetController', 'store'],
+    ['GET', '/api/budgets/{id}', 'App\Http\Controllers\BudgetController', 'show'],
+    ['PUT', '/api/budgets/{id}', 'App\Http\Controllers\BudgetController', 'update'],
+    ['DELETE', '/api/budgets/{id}', 'App\Http\Controllers\BudgetController', 'destroy'],
+
+    // Goal routes
+    ['GET', '/api/goals', 'App\Http\Controllers\GoalController', 'index'],
+    ['POST', '/api/goals', 'App\Http\Controllers\GoalController', 'store'],
+    ['GET', '/api/goals/{id}', 'App\Http\Controllers\GoalController', 'show'],
+    ['PUT', '/api/goals/{id}', 'App\Http\Controllers\GoalController', 'update'],
+    ['DELETE', '/api/goals/{id}', 'App\Http\Controllers\GoalController', 'destroy'],
+    ['POST', '/api/goals/{id}/deposit', 'App\Http\Controllers\GoalController', 'deposit'],
+    ['POST', '/api/goals/{id}/withdraw', 'App\Http\Controllers\GoalController', 'withdraw'],
 
     // Report routes
-    ['GET', '/api/reports/summary', 'App\\Http\\Controllers\\ReportController', 'summary'],
-    ['GET', '/api/reports/cashflow', 'App\\Http\\Controllers\\ReportController', 'cashflow'],
-    ['GET', '/api/reports/networth', 'App\\Http\\Controllers\\ReportController', 'networth'],
+    ['GET', '/api/reports/summary', 'App\Http\Controllers\ReportController', 'summary'],
+    ['GET', '/api/reports/cashflow', 'App\Http\Controllers\ReportController', 'cashflow'],
+    ['GET', '/api/reports/networth', 'App\Http\Controllers\ReportController', 'networth'],
+
+    // Dashboard routes
+    ['GET', '/api/dashboard', 'App\Http\Controllers\DashboardController', 'index'],
 
     // Frontend routes (serving HTML)
-    ['GET', '/', 'App\\Http\\Controllers\\HomeController', 'index'],
-    ['GET', '/login', 'App\\Http\\Controllers\\AuthController', 'showLoginForm'],
-    ['GET', '/register', 'App\\Http\\Controllers\\AuthController', 'showRegisterForm'],
-    ['GET', '/dashboard', 'App\\Http\\Controllers\\DashboardController', 'index'],
-    ['GET', '/accounts', 'App\\Http\\Controllers\\AccountController', 'indexPage'],
-    ['GET', '/transactions', 'App\\Http\\Controllers\\TransactionController', 'indexPage'],
-    ['GET', '/budgets', 'App\\Http\\Controllers\\BudgetController', 'indexPage'],
-    ['GET', '/reports', 'App\\Http\\Controllers\\ReportController', 'indexPage'],
+    ['GET', '/', 'App\Http\Controllers\HomeController', 'index'],
+    ['GET', '/login', 'App\Http\Controllers\AuthController', 'showLoginForm'],
+    ['GET', '/register', 'App\Http\Controllers\AuthController', 'showRegisterForm'],
+    ['GET', '/dashboard', 'App\Http\Controllers\DashboardController', 'indexPage'],
+    ['GET', '/accounts', 'App\Http\Controllers\AccountController', 'indexPage'],
+    ['GET', '/transactions', 'App\Http\Controllers\TransactionController', 'indexPage'],
+    ['GET', '/budgets', 'App\Http\Controllers\BudgetController', 'indexPage'],
+    ['GET', '/goals', 'App\Http\Controllers\GoalController', 'indexPage'],
+    ['GET', '/reports', 'App\Http\Controllers\ReportController', 'indexPage'],
 ];
 
 // Try to match the route
