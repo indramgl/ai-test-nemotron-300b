@@ -75,20 +75,30 @@ $routes = [
     ['GET', '/api/reports/cashflow', 'App\Http\Controllers\ReportController', 'cashflow'],
     ['GET', '/api/reports/networth', 'App\Http\Controllers\ReportController', 'networth'],
 
+    // Profile routes
+    ['GET', '/api/profile', 'App\\Http\\Controllers\\ProfileController', 'index'],
+    ['PUT', '/api/profile', 'App\\Http\\Controllers\\ProfileController', 'update'],
+    ['POST', '/api/profile/password', 'App\\Http\\Controllers\\ProfileController', 'changePassword'],
+
+    // Subscription routes
+    ['GET', '/api/subscription', 'App\\Http\\Controllers\\SubscriptionController', 'index'],
+    ['POST', '/api/subscription/upgrade', 'App\\Http\\Controllers\\SubscriptionController', 'upgrade'],
+
     // Dashboard routes
     ['GET', '/api/dashboard', 'App\Http\Controllers\DashboardController', 'index'],
 
     // Frontend routes (serving HTML)
-    ['GET', '/', 'App\Http\Controllers\HomeController', 'index'],
-    ['GET', '/login', 'App\Http\Controllers\AuthController', 'showLoginForm'],
-    ['GET', '/register', 'App\Http\Controllers\AuthController', 'showRegisterForm'],
-    ['GET', '/dashboard', 'App\Http\Controllers\DashboardController', 'indexPage'],
-    ['GET', '/accounts', 'App\Http\Controllers\AccountController', 'indexPage'],
-    ['GET', '/transactions', 'App\Http\Controllers\TransactionController', 'indexPage'],
-    ['GET', '/budgets', 'App\Http\Controllers\BudgetController', 'indexPage'],
-    ['GET', '/goals', 'App\Http\Controllers\GoalController', 'indexPage'],
-    ['GET', '/reports', 'App\Http\Controllers\ReportController', 'indexPage'],
-];
+        ['GET', '/', 'App\\Http\\Controllers\\HomeController', 'index'],
+        ['GET', '/login', 'App\\Http\\Controllers\\AuthController', 'showLoginForm'],
+        ['GET', '/register', 'App\\Http\\Controllers\\AuthController', 'showRegisterForm'],
+        ['GET', '/dashboard', 'App\\Http\\Controllers\\DashboardController', 'indexPage'],
+        ['GET', '/accounts', 'App\\Http\\Controllers\\AccountController', 'indexPage'],
+        ['GET', '/transactions', 'App\\Http\\Controllers\\TransactionController', 'indexPage'],
+        ['GET', '/budgets', 'App\\Http\\Controllers\\BudgetController', 'indexPage'],
+        ['GET', '/goals', 'App\\Http\\Controllers\\GoalController', 'indexPage'],
+        ['GET', '/reports', 'App\\Http\\Controllers\\ReportController', 'indexPage'],
+        ['GET', '/profile', 'App\\Http\\Controllers\\ProfileController', 'indexPage'],
+        ['GET', '/subscription', 'App\\Http\\Controllers\\SubscriptionController', 'indexPage'],
 
 // Try to match the route
 $found = false;
