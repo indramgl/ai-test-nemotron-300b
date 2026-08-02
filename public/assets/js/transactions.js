@@ -319,10 +319,45 @@ function updateFormForType(type) {
     if (type === 'TRANSFER') {
         transferFields.classList.remove('d-none');
         // Filter categories to only show Transfer type
-        // For now, we'll just use the first transfer category
+        filterCategoriesByType(categorySelect, 'TRANSFER');
     } else {
         transferFields.classList.add('d-none');
+        // Filter categories by type
+        filterCategoriesByType(categorySelect, type);
     }
+}
+
+// Filter categories by type (INCOME, EXPENSE, TRANSFER)
+function filterCategoriesByType(selectElement, type) {
+    if (!selectElement) return;
+    
+    const currentValue = selectElement.value;
+    selectElement.innerHTML = `<option value="">Pilih kategori</option>`;
+
+    // Group by parent
+    const parents = categoriesList.filter(c => !c.parent_id && c.type === type);
+    const children = categoriesList.filter(c => c.parent_id && c.type === type);
+
+    parents.forEach(parent => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = parent.name;
+        
+        const parentOption = document.createElement('option');
+        parentOption.value = parent.id;
+        parentOption.textContent = parent.name;
+        optgroup.appendChild(parentOption);
+
+        children.filter(c => c.parent_id === parent.id).forEach(child => {
+            const option = document.createElement('option');
+            option.value = child.id;
+            option.textContent = `  └ ${child.name}`;
+            optgroup.appendChild(option);
+        });
+
+        selectElement.appendChild(optgroup);
+    });
+
+    if (currentValue) selectElement.value = currentValue;
 }
 
 async function openEditTransactionModal(id) {
