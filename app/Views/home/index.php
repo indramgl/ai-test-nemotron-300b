@@ -1,6 +1,7 @@
 <?php
 $title = 'Personal Finance SaaS - Kelola Keuangan Anda dengan Mudah';
 $content = '
+<!-- Hero Section -->
 <div class="row min-vh-75 align-items-center">
     <div class="col-lg-6 mx-auto text-center">
         <div class="mb-4">
@@ -19,8 +20,8 @@ $content = '
     </div>
 </div>
 
-<!-- Features -->
-<div class="row py-5 mt-5 bg-light">
+<!-- Features Section -->
+<div class="row py-5 mt-5 bg-light" id="features">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold">Fitur Unggulan</h2>
         <div class="row g-4">
@@ -94,8 +95,8 @@ $content = '
     </div>
 </div>
 
-<!-- Pricing -->
-<div class="row py-5">
+<!-- Pricing Section -->
+<div class="row py-5" id="pricing">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold">Pilih Paket yang Tepat</h2>
         <div class="row g-4 justify-content-center">
@@ -148,12 +149,72 @@ $content = '
     </div>
 </div>
 
+<!-- About Section -->
+<div class="row py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Tentang FinanceApp</h2>
+                <p class="lead text-muted mb-4">FinanceApp adalah aplikasi keuangan pribadi modern yang dirancang untuk membantu Anda mengelola keuangan dengan mudah dan efisien.</p>
+                <p class="text-muted mb-4">Dibangun dengan teknologi modern dan antarmuka yang intuitif, FinanceApp memungkinkan Anda mencatat transaksi, mengelola anggaran, mengejar target tabungan, dan melihat laporan keuangan lengkap dalam satu aplikasi.</p>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-shield-check text-success fs-3 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Aman & Privat</h6>
+                                <small class="text-muted">Data Anda dienkripsi dan tidak dibagikan</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-phone text-primary fs-3 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Mobile Friendly</h6>
+                                <small class="text-muted">Akses kapan saja dari perangkat apa saja</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-graph-up text-success fs-3 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Laporan Lengkap</h6>
+                                <small class="text-muted">Visualisasi keuangan yang mudah dipahami</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center p-3 bg-white rounded shadow-sm">
+                            <i class="bi bi-lightning text-warning fs-3 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-0">Cepat & Ringan</h6>
+                                <small class="text-muted">Performa optimal di semua perangkat</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body p-5 text-center">
+                        <i class="bi bi-phone-landscape display-1 text-primary"></i>
+                        <h5 class="fw-bold mt-3">Siap Mulai?</h5>
+                        <p class="text-muted">Bergabung dengan ribuan pengguna yang sudah mengelola keuangan dengan lebih baik.</p>
+                        <a href="/register" class="btn btn-primary btn-lg px-5 mt-3">Mulai Sekarang Gratis</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- CTA -->
 <div class="row py-5 bg-primary text-white">
     <div class="container text-center">
         <h2 class="fw-bold mb-3">Siap Mengendalikan Keuangan Anda?</h2>
-        <p class="lead mb-4 opacity-75">Bergabung dengan ribuan pengguna yang sudah mengelola keuangan dengan lebih baik.</p>
-        <a href="/register" class="btn btn-light btn-lg px-5 fw-bold">Mulai Sekarang Gratis</a>
+        <p class="lead mb-4 opacity-75">Bergabung dengan ribuan pengguna yang sudah mengelola keuangan dengan lebih baik.</        <a href="/register" class="btn btn-light btn-lg px-5 fw-bold">Mulai Sekarang Gratis</a>
     </div>
 </div>
 ';

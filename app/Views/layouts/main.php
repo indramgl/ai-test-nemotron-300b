@@ -13,7 +13,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="mainNavbar">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/dashboard">
+            <a class="navbar-brand fw-bold" href="/">
                 <i class="bi bi-wallet2 me-2"></i>FinanceApp
             </a>
             
@@ -22,38 +22,12 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/dashboard"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/accounts"><i class="bi bi-credit-card me-1"></i>Rekening</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/transactions"><i class="bi bi-cash-stack me-1"></i>Transaksi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/budgets"><i class="bi bi-graph-up me-1"></i>Anggaran</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/goals"><i class="bi bi-bullseye me-1"></i>Target</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/reports"><i class="bi bi-bar-chart me-1"></i>Laporan</a>
-                    </li>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="mainNavLinks">
+                    <!-- Will be populated by JavaScript based on auth status -->
                 </ul>
                 
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-person-circle me-1"></i><span id="userName">User</span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><h6 class="dropdown-header" id="userEmail"></h6></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-                        </ul>
-                    </li>
+                <ul class="navbar-nav ms-auto" id="userNavLinks">
+                    <!-- Will be populated by JavaScript based on auth status -->
                 </ul>
             </div>
         </div>
