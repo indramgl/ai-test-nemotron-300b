@@ -23,8 +23,11 @@ $db = \App\Core\Database::getInstance();
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
-// Remove trailing slashes
+// Remove trailing slashes (but keep root as '/')
 $uri = rtrim($uri, '/');
+if ($uri === '') {
+    $uri = '/';
+}
 
 // Define routes
 $routes = [

@@ -57,7 +57,7 @@ class Transaction
                 $params['type'] = $filters['type'];
             }
             
-            if (!empty($filters['start_date) {
+            if (!empty($filters['start_date'])) {
                 $sql .= " AND t.transaction_date >= :start_date";
                 $params['start_date'] = $filters['start_date'];
             }
@@ -85,9 +85,38 @@ class Transaction
         return $stmt->fetchAll();
     }
 
-    public function create($userId, $accountId, $categoryId, $amount, $type, $description = '', $transactionDate = null, $isRecurring = false, $recurrencePattern = null, $recurrenceEndDate = null;
-                }
-            }
+    public function create($userId, $accountId, $categoryId, $amount, $type, $description = '', $transactionDate = null, $isRecurring = false, $recurrencePattern = null, $recurrenceEndDate = null)
+    {
+        if ($transactionDate === null) {
+            $transactionDate = date('Y-m-d');
+        }
+
+        $this->db->beginTransaction();
+
+        try {
+            $transactionId = \Ramsey\Uuid\Uuid::uuid4()->toString();
+            
+            $stmt = $this->db->prepare("
+                INSERT INTO transactions (id, user_id, account_id, category_id, amount, type, description, transaction_date, is_recurring, recurrence_pattern, recurrence_end_date)
+                VALUES (:id, :user_id, :account_id, :category_id, :amount, :type, :description, :transaction_date, :is_recurring, :recurrence_pattern, :recurrence_end_date)
+            ");
+
+            $stmt->execute([
+                'id' => $transactionId,
+                'user_id' => $userId,
+                'account_id' => $accountId,
+                'category_id' => $categoryId,
+                'amount' => $amount,
+                'type' => $type,
+                'description' => $description,
+                'transaction_date' => $transactionDate,
+                'is_recurring' => $isRecurring ? 1 : 0,
+                'recurrence_pattern' => $recurrencePattern,
+                'recurrence_end_date' => $recurrenceEndDate
+            ]);
+
+            // Update account balance
+            $this->adjustAccountBalance($accountId, $amount, $type === 'INCOME');
 
             $this->db->commit();
             return $transactionId;
@@ -133,8 +162,7 @@ class Transaction
                 $this->adjustAccountBalance(
                     $originalTransaction['account_id'],
                     $originalTransaction['amount'],
-                    $originalTransaction['type'] === 'INCOME' ? false : true, // Reverse the effect
-                    $userId
+                    $originalTransaction['type'] === 'INCOME' ? false : true
                 );
 
                 // Apply new transaction effect
@@ -145,8 +173,7 @@ class Transaction
                 $this->adjustAccountBalance(
                     $newAccountId,
                     $newAmount,
-                    $newType === 'INCOME',
-                    $userId
+                    $newType === 'INCOME'
                 );
 
                 // Update transaction
@@ -181,8 +208,7 @@ class Transaction
             $this->adjustAccountBalance(
                 $transaction['account_id'],
                 $transaction['amount'],
-                $transaction['type'] === 'INCOME' ? false : true, // Reverse the effect
-                $userId
+                $transaction['type'] === 'INCOME' ? false : true
             );
 
             // Delete transaction
@@ -248,35 +274,16 @@ class Transaction
         return $stmt->fetch();
     }
 
-    private function adjustAccountBalance($accountId, $amount, $isIncome, $userId = null)
+    private function adjustAccountBalance($accountId, $amount, $isIncome)
     {
-        $this->db->beginTransaction();
-
-        try {
-            // Verify account ownership if userId is provided
-            if ($userId !== null) {
-                $stmt = $this->db->prepare("SELECT id FROM accounts WHERE id = :id AND user_id = :user_id");
-                $stmt->execute(['id' => $accountId, 'user_id' => $userId]);
-                if (!$stmt->fetch()) {
-                    throw new \Exception('Account not found or does not belong to user');
-                }
-            }
-
-            // Update balance
-            if ($isIncome) {
-                $stmt = $this->db->prepare("UPDATE accounts SET balance = balance + :amount WHERE id = :id");
-            } else {
-                $stmt = $this->db->prepare("UPDATE accounts SET balance = balance - :amount WHERE id = :id");
-            }
-
-            $stmt->execute(['amount' => $amount, 'id' => $accountId]);
-            
-            $this->db->commit();
-            return true;
-        } catch (\Exception $e) {
-            $this->db->rollBack();
-            throw $e;
+        if ($isIncome) {
+            $stmt = $this->db->prepare("UPDATE accounts SET balance = balance + :amount WHERE id = :id");
+        } else {
+            $stmt = $this->db->prepare("UPDATE accounts SET balance = balance - :amount WHERE id = :id");
         }
+
+        $stmt->execute(['amount' => $amount, 'id' => $accountId]);
+        return true;
     }
 
     public function getRecurringTransactions($userId, $date = null)

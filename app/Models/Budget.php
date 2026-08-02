@@ -52,8 +52,6 @@ class Budget
     public function create($userId, $categoryId, $amount, $period = 'monthly', $startDate = null, $endDate = null)
     {
         if ($startDate === null) {
-            }
-
             $startDate = date('Y-m-d');
         }
 
@@ -76,8 +74,9 @@ class Budget
                 VALUES (:id, :user_id, :category_id, :amount, :period, :start_date, :end_date)
             ");
 
+            $budgetId = \Ramsey\Uuid\Uuid::uuid4()->toString();
             $stmt->execute([
-                'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+                'id' => $budgetId,
                 'user_id' => $userId,
                 'category_id' => $categoryId,
                 'amount' => $amount,
@@ -87,7 +86,7 @@ class Budget
             ]);
 
             $this->db->commit();
-            return $this->db->lastInsertId();
+            return $budgetId;
         } catch (\Exception $e) {
             $this->db->rollBack();
             throw $e;
@@ -202,7 +201,7 @@ class Budget
                     if ($percentage >= 80 && $budget['alert_threshold_80'] && $percentage < 100) {
                         $alerts[] = [
                             'type' => 'warning',
-                            'message' => "Anda telah menggunakan " . number_format($percentage, 1) "% dari anggaran untuk kategori {$usage['category_name']}",
+                            'message' => "Anda telah menggunakan " . number_format($percentage, 1) . "% dari anggaran untuk kategori {$usage['category_name']}",
                             'budget_id' => $budget['id'],
                             'category_name' => $usage['category_name'],
                             'percentage' => $percentage,
@@ -215,7 +214,7 @@ class Budget
                     if ($percentage >= 100 && $budget['alert_threshold_100']) {
                         $alerts[] = [
                             'type' => 'danger',
-                            'message' => "Anda telah melebihi anggaran untuk kategori {$usage['category_name']} sebesar " . number_format($percentage - 100, 1) "%",
+                            'message' => "Anda telah melebihi anggaran untuk kategori {$usage['category_name']} sebesar " . number_format($percentage - 100, 1) . "%",
                             'budget_id' => $budget['id'],
                             'category_name' => $usage['category_name'],
                             'percentage' => $percentage,

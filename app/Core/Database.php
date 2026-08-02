@@ -26,22 +26,48 @@ class Database
 
     private function connect()
     {
+        $driver = $this->config->get('database.driver', 'mysql');
+        
         try {
-            $host = $this->config->get('database.host', 'localhost');
-            $port = $this->config->get('database.port', 3306);
-            $dbname = $this->config->get('database.name', 'personal_finance');
-            $username = $this->config->get('database.username', 'root');
-            $password = $this->config->get('database.password', '');
-            $charset = $this->config->get('database.charset', 'utf8mb4');
+            if ($driver === 'sqlite') {
+                // SQLite for development/testing
+                $dbPath = $this->config->get('database.sqlite_path', __DIR__ . '/../../storage/app.db');
+                $dir = dirname($dbPath);
+                if (!is_dir($dir)) {
+                    mkdir($dir, 0755, true);
+                }
+                
+                $dsn = "sqlite:$dbPath";
+                $options = [
+                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES   => false,
+                ];
+                
+                $this->connection = new PDO($dsn, null, null, $options);
+                
+                // Enable foreign keys for SQLite
+                $this->connection->exec('PRAGMA foreign_keys = ON');
+                $this->connection->exec('PRAGMA journal_mode = WAL');
+                
+            } else {
+                // MySQL for production
+                $host = $this->config->get('database.host', 'localhost');
+                $port = $this->config->get('database.port', 3306);
+                $dbname = $this->config->get('database.name', 'personal_finance');
+                $username = $this->config->get('database.username', 'root');
+                $password = $this->config->get('database.password', '');
+                $charset = $this->config->get('database.charset', 'utf8mb4');
 
-            $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
-            $options = [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
-            ];
+                $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=$charset";
+                $options = [
+                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES   => false,
+                ];
 
-            $this->connection = new PDO($dsn, $username, $password, $options);
+                $this->connection = new PDO($dsn, $username, $password, $options);
+            }
         } catch (PDOException $e) {
             throw new \RuntimeException('Database connection failed: ' . $e->getMessage());
         }

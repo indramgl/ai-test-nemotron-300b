@@ -42,8 +42,8 @@ class Auth
             'password_hash' => $passwordHash,
             'base_currency' => $userData['base_currency'] ?? 'IDR',
             'first_name' => $userData['first_name'] ?? null,
-            'last_name' => $userData['last_name'] => null,
-            'phone' => $userData['phone'] => null,
+            'last_name' => $userData['last_name'] ?? null,
+            'phone' => $userData['phone'] ?? null,
         ]);
 
         // Create default accounts for new user
