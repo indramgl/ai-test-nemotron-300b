@@ -87,6 +87,15 @@ class TransactionController extends Controller
             return;
         }
 
+        // Check if recurring transactions are allowed for user's subscription tier
+        if ($isRecurring) {
+            $userSubscription = $this->checkUserSubscription($userId);
+            if ($userSubscription && $userSubscription['plan_name'] === 'Free') {
+                $this->jsonResponse(['error' => 'Recurring transactions are only available for Pro tier. Upgrade to Pro to use this feature.'], 403);
+                return;
+            }
+        }
+
         try {
             $transactionId = $this->transactionModel->create(
                 $userId, 
@@ -98,13 +107,9 @@ class TransactionController extends Controller
                 $transactionDate, 
                 $isRecurring, 
                 $recurrencePattern, 
-                $recurrenceEndDate
+                $recurrenceEndDate,
+                $toAccountId  // Pass to_account_id as last parameter for TRANSFER
             );
-
-            // If it's a transfer, handle the destination account
-            if ($type === 'TRANSFER' && $toAccountId) {
-                $this->accountModel->transfer($accountId, $toAccountId, $amount, $userId);
-            }
 
             $transaction = $this->transactionModel->findById($transactionId, $userId);
             $this->jsonResponse(['transaction' => $transaction], 201);
@@ -160,6 +165,21 @@ class TransactionController extends Controller
         }
         
         $this->jsonResponse(['message' => 'Transaction deleted successfully']);
+    }
+
+    private function checkUserSubscription($userId)
+    {
+        $db = \App\Core\Database::getInstance()->getConnection();
+        $stmt = $db->prepare("
+            SELECT sp.name as plan_name 
+            FROM user_subscriptions us
+            JOIN subscription_plans sp ON us.plan_id = sp.id
+            WHERE us.user_id = :user_id AND us.is_active = 1
+            ORDER BY us.start_date DESC
+            LIMIT 1
+        ");
+        $stmt->execute(['user_id' => $userId]);
+        return $stmt->fetch();
     }
 
     public function summary()

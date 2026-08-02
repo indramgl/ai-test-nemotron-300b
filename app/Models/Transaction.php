@@ -85,7 +85,7 @@ class Transaction
         return $stmt->fetchAll();
     }
 
-    public function create($userId, $accountId, $categoryId, $amount, $type, $description = '', $transactionDate = null, $isRecurring = false, $recurrencePattern = null, $recurrenceEndDate = null)
+    public function create($userId, $accountId, $categoryId, $amount, $type, $description = '', $transactionDate = null, $isRecurring = false, $recurrencePattern = null, $recurrenceEndDate = null, $toAccountId = null)
     {
         if ($transactionDate === null) {
             $transactionDate = date('Y-m-d');
@@ -115,8 +115,15 @@ class Transaction
                 'recurrence_end_date' => $recurrenceEndDate
             ]);
 
-            // Update account balance
-            $this->adjustAccountBalance($accountId, $amount, $type === 'INCOME');
+            // Update account balance - skip for TRANSFER as it's handled below
+            if ($type !== 'TRANSFER') {
+                $this->adjustAccountBalance($accountId, $amount, $type === 'INCOME');
+            } else {
+                // For TRANSFER, handle transfer between accounts
+                if ($toAccountId) {
+                    $this->transferBetweenAccounts($accountId, $toAccountId, $amount);
+                }
+            }
 
             $this->db->commit();
             return $transactionId;
@@ -315,5 +322,27 @@ class Transaction
         ]);
 
         return $stmt->fetchAll();
+    }
+
+    private function transferBetweenAccounts($fromAccountId, $toAccountId, $amount)
+    {
+        // Check if source account has sufficient funds
+        $stmt = $this->db->prepare("SELECT balance FROM accounts WHERE id = :id");
+        $stmt->execute(['id' => $fromAccountId]);
+        $fromAccount = $stmt->fetch();
+        
+        if (!$fromAccount || (float)$fromAccount['balance'] < (float)$amount) {
+            throw new \Exception('Insufficient funds');
+        }
+
+        // Deduct from source account
+        $stmt = $this->db->prepare("UPDATE accounts SET balance = balance - :amount WHERE id = :id");
+        $stmt->execute(['amount' => $amount, 'id' => $fromAccountId]);
+
+        // Add to destination account
+        $stmt = $this->db->prepare("UPDATE accounts SET balance = balance + :amount WHERE id = :id");
+        $stmt->execute(['amount' => $amount, 'id' => $toAccountId]);
+
+        return true;
     }
 }

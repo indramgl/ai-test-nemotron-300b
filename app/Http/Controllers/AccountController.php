@@ -44,6 +44,16 @@ class AccountController extends Controller
             return;
         }
 
+        // Check Free tier account limit (max 3 accounts)
+        $userSubscription = $this->checkUserSubscription($userId);
+        if ($userSubscription && $userSubscription['plan_name'] === 'Free') {
+            $currentAccounts = $this->accountModel->findByUserId($userId);
+            if (count($currentAccounts) >= 3) {
+                $this->jsonResponse(['error' => 'Free tier limit reached. Maximum 3 accounts allowed. Upgrade to Pro for unlimited accounts.'], 403);
+                return;
+            }
+        }
+
         try {
             $accountId = $this->accountModel->create($userId, $accountTypeId, $name, $initialBalance, $currency);
             $account = $this->accountModel->findById($accountId, $userId);
@@ -51,6 +61,21 @@ class AccountController extends Controller
         } catch (\Exception $e) {
             $this->jsonResponse(['error' => $e->getMessage()], 400);
         }
+    }
+
+    private function checkUserSubscription($userId)
+    {
+        $db = \App\Core\Database::getInstance()->getConnection();
+        $stmt = $db->prepare("
+            SELECT sp.name as plan_name 
+            FROM user_subscriptions us
+            JOIN subscription_plans sp ON us.plan_id = sp.id
+            WHERE us.user_id = :user_id AND us.is_active = 1
+            ORDER BY us.start_date DESC
+            LIMIT 1
+        ");
+        $stmt->execute(['user_id' => $userId]);
+        return $stmt->fetch();
     }
 
     public function show($id)
