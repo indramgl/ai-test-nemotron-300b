@@ -46,7 +46,7 @@ class ProfileController extends Controller
                 'base_currency' => $user['base_currency'],
                 'created_at' => $user['created_at']
             ],
-            'subscription' => $subscription ?: [
+            'subscription' => $subscription ? $subscription : [
                 'plan_name' => 'Free',
                 'is_active' => true
             ]

@@ -75,11 +75,11 @@ class SubscriptionController extends Controller
         
         // In a real implementation, this would integrate with a payment gateway
         // For now, we'll simulate a successful upgrade
-        $this->db->beginTransaction();
+        $db->beginTransaction();
         
         try {
             // Deactivate current subscription
-            $stmt = $this->db->prepare("
+            $stmt = $db->prepare("
                 UPDATE user_subscriptions 
                 SET is_active = 0 
                 WHERE user_id = :user_id AND is_active = 1
@@ -92,7 +92,7 @@ class SubscriptionController extends Controller
             $endDate = $billingCycle === 'yearly' ? date('Y-m-d', strtotime('+1 year')) : date('Y-m-d', strtotime('+1 month'));
             $nextBillingDate = $endDate;
             
-            $stmt = $this->db->prepare("
+            $stmt = $db->prepare("
                 INSERT INTO user_subscriptions (id, user_id, plan_id, start_date, end_date, is_active, next_billing_date)
                 VALUES (:id, :user_id, :plan_id, :start_date, :end_date, 1, :next_billing_date)
             ");
@@ -106,7 +106,7 @@ class SubscriptionController extends Controller
                 'next_billing_date' => $nextBillingDate
             ]);
             
-            $this->db->commit();
+            $db->commit();
             
             $this->jsonResponse([
                 'message' => 'Subscription upgraded successfully',
@@ -119,7 +119,7 @@ class SubscriptionController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
-            $this->db->rollBack();
+            $db->rollBack();
             $this->jsonResponse(['error' => $e->getMessage()], 400);
         }
     }

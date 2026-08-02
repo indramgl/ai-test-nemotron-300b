@@ -39,8 +39,8 @@ class User
             'password_hash' => $data['password_hash'],
             'base_currency' => $data['base_currency'] ?? 'IDR',
             'first_name' => $data['first_name'] ?? null,
-            'last_name' => $data['last_name'] => null,
-            'phone' => $data['phone'] => null,
+            'last_name' => $data['last_name'] ?? null,
+            'phone' => $data['phone'] ?? null,
         ]);
 
         return $this->db->lastInsertId();

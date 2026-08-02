@@ -201,8 +201,7 @@ $content = '
                     <div class="card-body p-5 text-center">
                         <i class="bi bi-phone-landscape display-1 text-primary"></i>
                         <h5 class="fw-bold mt-3">Siap Mulai?</h5>
-                        <p class="text-muted">Bergabung dengan ribuan pengguna yang sudah mengelola keuangan dengan lebih baik.</p>
-                        <a href="/register" class="btn btn-primary btn-lg px-5 mt-3">Mulai Sekarang Gratis</a>
+                        <p class="text-muted">Bergabung dengan ribuan pengguna yang sudah mengelola keuangan dengan lebih baik.</                        <a href="/register" class="btn btn-primary btn-lg px-5 mt-3">Mulai Sekarang Gratis</a>
                     </div>
                 </div>
             </div>
